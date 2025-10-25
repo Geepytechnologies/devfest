@@ -290,10 +290,9 @@ export default function Home() {
 
             {/* Right side: preview */}
             <div className="w-full overflow-x-auto ">
-              <div
-                ref={photoBoardRef}
-                className="min-w-[700px] mx-auto flex justify-center items-center">
+              <div className="min-w-[700px] mx-auto flex justify-center items-center">
                 <PhotoBoard
+                  ref={photoBoardRef}
                   tag={generatedTag}
                   name={generatedName}
                   image={generatedImage}
