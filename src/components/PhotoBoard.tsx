@@ -72,7 +72,7 @@ const PhotoBoard = forwardRef<HTMLDivElement, Props>(
     }, [image]);
 
     return (
-      <div className="bg-[#FFFDEB] py-9 px-5v" ref={ref}>
+      <div className="bg-[#FFFDEB] py-9 px-5" ref={ref}>
         <div className="flex flex-row justify-between">
           <Image src={Logo} alt="devfest-maiduguri" />
           <Image src={Castle} alt="devfest-maiduguri" />
