@@ -127,62 +127,63 @@ export default function Home() {
   return (
     <>
       <div className="font-poppins bg-white">
-        <div className="container">
-          {/* Hero Section */}
-          <section>
-            <div className="relative min-h-screen overflow-hidden bg-gray-100">
-              <div className="relative z-50">
-                <nav className="relative z-50 mt-10 lg:mt-20">
-                  <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
-                      <div className="flex items-center flex-shrink-0">
-                        <a href="/" className="flex items-center">
-                          <Image src={Logo} alt="devfest-maiduguri" />
-                        </a>
-                      </div>
+        {/* Hero Section */}
+        <section>
+          <div className="relative min-h-screen overflow-hidden bg-gray-100">
+            <div className="relative z-50">
+              <nav className="relative z-50 mt-10 lg:mt-20">
+                <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+                  <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
+                    <div className="flex items-center flex-shrink-0">
+                      <a href="/" className="flex items-center">
+                        <Image src={Logo} alt="devfest-maiduguri" />
+                      </a>
                     </div>
                   </div>
-                </nav>
-              </div>
-              <div className="absolute inset-0 z-0 flex justify-center">
-                <Image
-                  src={Background}
-                  alt="Background"
-                  className="object-cover w-full h-full opacity-50"
-                />
-                <div className="absolute inset-0 bg-white/20"></div>
-              </div>
-              <div className="relative z-10">
-                <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-12 lg:px-8 pt-20 sm:pt-24 md:pt-28 lg:pt-10 min-h-[70vh] sm:min-h-[75vh] md:min-h-[70vh] lg:min-h-[80vh]">
-                  <p className="max-w-xs mb-3 text-base font-medium tracking-wide text-gray-800 sm:mb-4 md:mb-5 sm:text-lg md:text-2xl lg:text-xl sm:max-w-sm md:max-w-2xl lg:max-w-none drop-shadow-sm">
-                    Let everyone know you're coming!
-                  </p>
-                  <h1 className="max-w-xs mb-6 text-5xl font-black leading-tight text-black sm:text-3xl md:text-8xl lg:text-6xl xl:text-7xl sm:mb-8 md:mb-10 sm:max-w-md md:max-w-5xl lg:max-w-6xl drop-shadow-sm font-poppins">
-                    Create your custom DevFest display photo
-                  </h1>
-                  <a
-                    href="#dp-container"
-                    className="z-10 cursor-pointer px-6 py-3 text-base font-bold text-white transition-all duration-300 transform bg-[linear-gradient(to_right,#4285F4,#EA4335,#FBBC05,#34A853)] shadow-lg sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-xl sm:text-lg md:text-xl hover:bg-gray-800 border-[2px] border-white hover:scale-105 hover:shadow-xl active:scale-95"
-                  >
-                    Get Started!
-                  </a>
                 </div>
-                <div className="absolute top-20 left-10 w-4 h-4 bg-yellow-400 rounded-full animate-bounce animation-delay-[1s] z-30 drop-shadow-md"></div>
-                <div className="absolute top-32 right-16 w-0 h-0 border-l-4 border-r-4 border-b-6 border-l-transparent border-r-transparent border-b-pink-400 animate-pulse animation-delay-[2s] z-30 drop-shadow-md"></div>
-                <div className="absolute bottom-32 left-8 w-6 h-2 bg-blue-400 rounded-full animate-pulse animation-delay-[500ms] z-30 drop-shadow-md"></div>
-                <div className="absolute bottom-40 right-12 w-4 h-4 bg-green-400 transform rotate-45 animate-spin animation-duration-[6s] z-30 drop-shadow-md"></div>
-              </div>
+              </nav>
             </div>
-          </section>
+            <div className="absolute inset-0 z-0 flex justify-center">
+              <Image
+                src={Background}
+                alt="Background"
+                className="object-cover w-full h-full opacity-50"
+              />
+              <div className="absolute inset-0 bg-white/20"></div>
+            </div>
+            <div className="relative z-10">
+              <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-12 lg:px-8 pt-20 sm:pt-24 md:pt-28 lg:pt-10 min-h-[70vh] sm:min-h-[75vh] md:min-h-[70vh] lg:min-h-[80vh]">
+                <p className="max-w-xs mb-3 text-base font-medium tracking-wide text-gray-800 sm:mb-4 md:mb-5 sm:text-lg md:text-2xl lg:text-xl sm:max-w-sm md:max-w-2xl lg:max-w-none drop-shadow-sm">
+                  Let everyone know you're coming!
+                </p>
+                <h1 className="max-w-xs mb-6 text-5xl font-black leading-tight text-black sm:text-3xl md:text-8xl lg:text-6xl xl:text-7xl sm:mb-8 md:mb-10 sm:max-w-md md:max-w-5xl lg:max-w-6xl drop-shadow-sm font-poppins">
+                  Create your custom DevFest display photo
+                </h1>
+                <a
+                  href="#dp-container"
+                  className="z-10 cursor-pointer px-6 py-3 text-base font-bold text-white transition-all duration-300 transform bg-[linear-gradient(to_right,#4285F4,#EA4335,#FBBC05,#34A853)] shadow-lg sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-xl sm:text-lg md:text-xl hover:bg-gray-800 border-[2px] border-white hover:scale-105 hover:shadow-xl active:scale-95">
+                  Get Started!
+                </a>
+              </div>
+              <div className="absolute top-20 left-10 w-4 h-4 bg-yellow-400 rounded-full animate-bounce animation-delay-[1s] z-30 drop-shadow-md"></div>
+              <div className="absolute top-32 right-16 w-0 h-0 border-l-4 border-r-4 border-b-6 border-l-transparent border-r-transparent border-b-pink-400 animate-pulse animation-delay-[2s] z-30 drop-shadow-md"></div>
+              <div className="absolute bottom-32 left-8 w-6 h-2 bg-blue-400 rounded-full animate-pulse animation-delay-[500ms] z-30 drop-shadow-md"></div>
+              <div className="absolute bottom-40 right-12 w-4 h-4 bg-green-400 transform rotate-45 animate-spin animation-duration-[6s] z-30 drop-shadow-md"></div>
+            </div>
+          </div>
+        </section>
+        <div className="container mx-auto">
           {/* Form Section */}
           <section
-            className="flex flex-col md:flex-row items-center justify-between gap-10 mt-20"
-            id="dp-container"
-          >
-            <div>
+            className="flex flex-col md:flex-row items-center justify-center gap-10 my-10 px-6 md:pl-16  min-h-[90vh] "
+            id="dp-container">
+            {/* Left side: form */}
+            <div className="w-full md:w-2/5 flex flex-col justify-center ">
               <h2 className="pb-4 mb-8 text-3xl text-black font-bold border-b-2 border-black">
                 Input your details
               </h2>
+
+              {/* Full Name */}
               <div className="mb-4">
                 <label className="text-black" htmlFor="name">
                   Full Name
@@ -197,6 +198,8 @@ export default function Home() {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
+
+              {/* Tag Hook */}
               <div className="mb-4">
                 <label className="text-black" htmlFor="tag">
                   Tag Hook
@@ -211,11 +214,12 @@ export default function Home() {
                   onChange={(e) => setTag(e.target.value)}
                 />
               </div>
+
+              {/* Upload Image */}
               <div>
                 <label
                   className="block mb-3 font-semibold"
-                  htmlFor="file-upload"
-                >
+                  htmlFor="file-upload">
                   Upload Image
                 </label>
                 <div
@@ -229,8 +233,7 @@ export default function Home() {
                   onDragOver={handleDrag}
                   onDragLeave={handleDrag}
                   onDrop={handleDrop}
-                  style={{ cursor: "pointer" }}
-                >
+                  style={{ cursor: "pointer" }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="40"
@@ -241,17 +244,15 @@ export default function Home() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="lucide lucide-cloud-upload mx-auto mb-2"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 13v8"></path>
-                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
-                    <path d="m8 17 4-4 4 4"></path>
+                    className="lucide lucide-cloud-upload mx-auto mb-2">
+                    <path d="M12 13v8" />
+                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+                    <path d="m8 17 4-4 4 4" />
                   </svg>
                   <p className="text-sm">
                     Click or drag and drop your profile picture
                     <br />
-                    SVG, PNG, JPG or GIF (max. 800 x 400 px)
+                    SVG, PNG, JPG or GIF (max. 800 × 400 px)
                   </p>
                   <input
                     id="file-upload"
@@ -270,7 +271,9 @@ export default function Home() {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col items-center gap-4 w-full mt-4">
+
+              {/* Generate button */}
+              <div className="flex flex-col items-center gap-4 w-full mt-6">
                 <button
                   className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 w-full rounded-2xl h-14 text-lg"
                   onClick={handleGenerate}
@@ -279,28 +282,33 @@ export default function Home() {
                   style={{
                     opacity: !name && !tag && !image ? 0.5 : 1,
                     cursor: !name && !tag && !image ? "not-allowed" : "pointer",
-                  }}
-                >
+                  }}>
                   Generate
                 </button>
               </div>
             </div>
-            <div ref={photoBoardRef} className="w-full flex justify-center">
-              <PhotoBoard
-                tag={generatedTag}
-                name={generatedName}
-                image={generatedImage}
-              />
+
+            {/* Right side: preview */}
+            <div className="w-full overflow-x-auto ">
+              <div
+                ref={photoBoardRef}
+                className="min-w-[700px] mx-auto flex justify-center items-center">
+                <PhotoBoard
+                  tag={generatedTag}
+                  name={generatedName}
+                  image={generatedImage}
+                />
+              </div>
             </div>
           </section>
+
           {/* Show PhotoBoard and Download button only if generated */}
           {(generatedName || generatedTag || generatedImage) && (
-            <section className="flex flex-col items-center gap-4 w-full">
+            <section className="flex flex-col items-center gap-4 w-full px-6 md:px-16">
               <button
                 className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-green-500 text-white hover:bg-green-600 w-full rounded-2xl h-14 text-lg"
                 onClick={handleDownload}
-                type="button"
-              >
+                type="button">
                 Download PhotoBoard
               </button>
             </section>
@@ -308,7 +316,7 @@ export default function Home() {
         </div>
       </div>
       {/* footer */}
-      <footer className="bg-[#f0f0f0] text-black min-h-[80px] py-6 px-6">
+      <footer className="bg-[#f0f0f0] text-black min-h-[80px] py-6 px-6 mt-10">
         <div className="container mx-auto text-center">
           <Image src={Logo} alt="devfest-maiduguri" />
 

@@ -60,7 +60,7 @@ const PhotoBoard = ({ tag, name, image }: Props) => {
               y="0"
               width="290"
               height="255"
-              preserveAspectRatio="xMinYMin slice"
+              preserveAspectRatio="xMidYMid slice"
               crossOrigin="anonymous"
               clipPath=""
             />
