@@ -10,6 +10,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-poppins: var(--font-poppins);
+  --font-josef: var(--font-josefin-sans);
+  --font-coolvetica: var(--font-coolvetica);
 }
 
 @media (prefers-color-scheme: dark) {
