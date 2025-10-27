@@ -7,6 +7,7 @@ import PhotoBoard from "@/components/PhotoBoard";
 import React, { useRef, useState, DragEvent, ChangeEvent } from "react";
 import html2canvas from "html2canvas";
 import { IoCloudDownloadOutline } from "react-icons/io5";
+import Link from "next/link";
 
 export default function Home() {
   // Drag and drop/file input handlers
@@ -100,7 +101,7 @@ export default function Home() {
 
           // Force images to load properly
           const images = clonedElement.getElementsByTagName("img");
-          for (let img of images) {
+          for (const img of images) {
             img.style.display = "block";
             img.style.objectFit = "cover";
           }
@@ -136,9 +137,9 @@ export default function Home() {
                 <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
                   <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
                     <div className="flex items-center flex-shrink-0">
-                      <a href="/" className="flex items-center">
+                      <Link href="/" className="flex items-center">
                         <Image src={Logo} alt="devfest-maiduguri" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -160,7 +161,7 @@ export default function Home() {
             <div className="relative z-10">
               <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-12 lg:px-8 pt-20 sm:pt-24 md:pt-28 lg:pt-10 min-h-[70vh] sm:min-h-[75vh] md:min-h-[70vh] lg:min-h-[80vh]">
                 <p className="max-w-xs mb-3 text-base font-medium tracking-wide text-gray-800 sm:mb-4 md:mb-5 sm:text-lg md:text-2xl lg:text-xl sm:max-w-sm md:max-w-2xl lg:max-w-none drop-shadow-sm">
-                  Let everyone know you're coming!
+                  Let everyone know you&apos;re coming!
                 </p>
                 <h1 className="max-w-xs mb-6 text-5xl font-black leading-tight text-black sm:text-3xl md:text-8xl lg:text-6xl xl:text-7xl sm:mb-8 md:mb-10 sm:max-w-md md:max-w-5xl lg:max-w-6xl drop-shadow-sm font-poppins">
                   Create your custom DevFest display photo
