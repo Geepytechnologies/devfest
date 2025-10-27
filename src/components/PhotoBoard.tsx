@@ -17,7 +17,7 @@ type Props = {
 };
 
 const TARGET_WIDTH = 250;
-const TARGET_HEIGHT = 295;
+const TARGET_HEIGHT = 290;
 
 const PhotoBoard = forwardRef<HTMLDivElement, Props>(
   ({ tag, name, image }, ref) => {
@@ -101,7 +101,8 @@ const PhotoBoard = forwardRef<HTMLDivElement, Props>(
               height={TARGET_HEIGHT}
               viewBox={`0 0 ${TARGET_WIDTH} ${TARGET_HEIGHT}`}
               className="bg-white rounded-[22px]"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
                 <clipPath id="image-clip">
                   <rect

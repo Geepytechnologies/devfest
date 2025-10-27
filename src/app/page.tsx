@@ -6,6 +6,7 @@ import Background from "@/assets/bgfill.jpg";
 import PhotoBoard from "@/components/PhotoBoard";
 import React, { useRef, useState, DragEvent, ChangeEvent } from "react";
 import html2canvas from "html2canvas";
+import { IoCloudDownloadOutline } from "react-icons/io5";
 
 export default function Home() {
   // Drag and drop/file input handlers
@@ -149,6 +150,11 @@ export default function Home() {
                 alt="Background"
                 className="object-cover w-full h-full opacity-50"
               />
+              <Image
+                src={Background}
+                alt="Background"
+                className="object-cover w-full h-full opacity-50 "
+              />
               <div className="absolute inset-0 bg-white/20"></div>
             </div>
             <div className="relative z-10">
@@ -161,7 +167,8 @@ export default function Home() {
                 </h1>
                 <a
                   href="#dp-container"
-                  className="z-10 cursor-pointer px-6 py-3 text-base font-bold text-white transition-all duration-300 transform bg-[linear-gradient(to_right,#4285F4,#EA4335,#FBBC05,#34A853)] shadow-lg sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-xl sm:text-lg md:text-xl hover:bg-gray-800 border-[2px] border-white hover:scale-105 hover:shadow-xl active:scale-95">
+                  className="z-10 cursor-pointer px-6 py-3 text-base font-bold text-white transition-all duration-300 transform bg-[linear-gradient(to_right,#4285F4,#EA4335,#FBBC05,#34A853)] shadow-lg sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-xl sm:text-lg md:text-xl hover:bg-gray-800 border-[2px] border-white hover:scale-105 hover:shadow-xl active:scale-95"
+                >
                   Get Started!
                 </a>
               </div>
@@ -176,7 +183,8 @@ export default function Home() {
           {/* Form Section */}
           <section
             className="flex flex-col md:flex-row items-center justify-center gap-10 my-10 px-6 md:pl-16  min-h-[90vh] "
-            id="dp-container">
+            id="dp-container"
+          >
             {/* Left side: form */}
             <div className="w-full md:w-2/5 flex flex-col justify-center ">
               <h2 className="pb-4 mb-8 text-3xl text-black font-bold border-b-2 border-black">
@@ -219,7 +227,8 @@ export default function Home() {
               <div>
                 <label
                   className="block mb-3 font-semibold"
-                  htmlFor="file-upload">
+                  htmlFor="file-upload"
+                >
                   Upload Image
                 </label>
                 <div
@@ -233,7 +242,8 @@ export default function Home() {
                   onDragOver={handleDrag}
                   onDragLeave={handleDrag}
                   onDrop={handleDrop}
-                  style={{ cursor: "pointer" }}>
+                  style={{ cursor: "pointer" }}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="40"
@@ -244,7 +254,8 @@ export default function Home() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="lucide lucide-cloud-upload mx-auto mb-2">
+                    className="lucide lucide-cloud-upload mx-auto mb-2"
+                  >
                     <path d="M12 13v8" />
                     <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
                     <path d="m8 17 4-4 4 4" />
@@ -282,7 +293,8 @@ export default function Home() {
                   style={{
                     opacity: !name && !tag && !image ? 0.5 : 1,
                     cursor: !name && !tag && !image ? "not-allowed" : "pointer",
-                  }}>
+                  }}
+                >
                   Generate
                 </button>
               </div>
@@ -298,20 +310,20 @@ export default function Home() {
                   image={generatedImage}
                 />
               </div>
+              {/* Show PhotoBoard and Download button only if generated */}
+              {(generatedName || generatedTag || generatedImage) && (
+                <section className="flex items-center justify-center gap-4 px-6 md:px-16 mt-4">
+                  <button
+                    className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-black text-white w-fit rounded-2xl h-14 text-lg flex gap-1 items-center"
+                    onClick={handleDownload}
+                    type="button"
+                  >
+                    <IoCloudDownloadOutline /> <span>Download Your Dp</span>
+                  </button>
+                </section>
+              )}
             </div>
           </section>
-
-          {/* Show PhotoBoard and Download button only if generated */}
-          {(generatedName || generatedTag || generatedImage) && (
-            <section className="flex flex-col items-center gap-4 w-full px-6 md:px-16">
-              <button
-                className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-green-500 text-white hover:bg-green-600 w-full rounded-2xl h-14 text-lg"
-                onClick={handleDownload}
-                type="button">
-                Download PhotoBoard
-              </button>
-            </section>
-          )}
         </div>
       </div>
       {/* footer */}
