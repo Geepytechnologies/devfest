@@ -5,7 +5,9 @@ import Logo from "@/assets/group-logo.svg";
 import Background from "@/assets/bgfill.jpg";
 import PhotoBoard from "@/components/PhotoBoard";
 import React, { useRef, useState, DragEvent, ChangeEvent } from "react";
-import html2canvas from "html2canvas";
+// import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
+
 import { IoCloudDownloadOutline } from "react-icons/io5";
 import Link from "next/link";
 
@@ -59,6 +61,8 @@ export default function Home() {
   const [generatedTag, setGeneratedTag] = useState("");
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const photoBoardRef = useRef<HTMLDivElement>(null);
+  const [showPhotoBoard, setShowPhotoBoard] = useState(false);
+
   // Handle generate button
   const handleGenerate = () => {
     setGeneratedName(name);
@@ -66,66 +70,52 @@ export default function Home() {
     setGeneratedImage(image);
   };
 
-  // Handle download button
-  // const handleDownload = async () => {
-  //   if (photoBoardRef.current) {
-  //     const canvas = await html2canvas(photoBoardRef.current, {
-  //       backgroundColor: null,
-  //     });
-  //     const link = document.createElement("a");
-  //     link.download = "photoboard.png";
-  //     link.href = canvas.toDataURL();
-  //     link.click();
-  //   }
-  // };
-
   const handleDownload = async () => {
-    if (photoBoardRef.current) {
-      // Pre-load fonts to ensure they're available for html2canvas
+    if (!photoBoardRef.current) return;
+
+    try {
+      // 1) Wait for fonts to finish loading so text renders correctly
       await document.fonts.ready;
 
-      const canvas = await html2canvas(photoBoardRef.current, {
-        scale: 2, // Double the scale for better quality
-        useCORS: true, // Enable cross-origin images
-        allowTaint: false, // Disable tainting for better security
-        backgroundColor: "#FFFDEB", // Match your background color
-        logging: false, // Disable logging for better performance
-        width: photoBoardRef.current.scrollWidth,
-        height: photoBoardRef.current.scrollHeight,
-        onclone: (clonedDoc, element) => {
-          // Fix any styling issues in the cloned document
-          const clonedElement = element as HTMLElement;
+      // 2) Wait for all images inside the photoboard to be loaded
+      const imgs = Array.from(
+        photoBoardRef.current.querySelectorAll("img")
+      ) as HTMLImageElement[];
+      await Promise.all(
+        imgs.map(
+          (img) =>
+            new Promise<void>((resolve) => {
+              if (img.complete && img.naturalWidth !== 0) return resolve();
+              // If image fails to load we still resolve to avoid hanging
+              img.addEventListener("load", () => resolve());
+              img.addEventListener("error", () => resolve());
+            })
+        )
+      );
 
-          // Ensure proper font loading in the clone
-          clonedElement.style.fontFamily = "'Poppins', Arial, sans-serif";
-
-          // Force images to load properly
-          const images = clonedElement.getElementsByTagName("img");
-          for (const img of images) {
-            img.style.display = "block";
-            img.style.objectFit = "cover";
-          }
-
-          // Fix alignment issues for specific elements
-          const globeContainer = clonedElement.querySelector(
-            '[alt="devfest-maiduguri"]'
-          )?.parentElement;
-          if (globeContainer) {
-            globeContainer.style.display = "flex";
-            globeContainer.style.alignItems = "center";
-          }
+      // 3) Export just the photoboard node (no extra UI)
+      const dataUrl = await toPng(photoBoardRef.current, {
+        cacheBust: true,
+        quality: 1,
+        pixelRatio: 2, // increase for sharper output
+        backgroundColor: "#FFFDEB", // same background as your card
+        style: {
+          transform: "none",
+          transformOrigin: "top left",
+          backgroundColor: "#FFFDEB",
         },
       });
 
-      // Create a higher quality image
+      // 4) trigger download
       const link = document.createElement("a");
       link.download = "devfest-ticket.png";
-      link.href = canvas.toDataURL("image/png", 1.0); // Highest quality
+      link.href = dataUrl;
       link.click();
+    } catch (error) {
+      console.error("Error generating image:", error);
     }
   };
 
-  // Handle file selection
   return (
     <>
       <div className="font-poppins bg-white">
@@ -168,8 +158,7 @@ export default function Home() {
                 </h1>
                 <a
                   href="#dp-container"
-                  className="z-10 cursor-pointer px-6 py-3 text-base font-bold text-white transition-all duration-300 transform bg-[linear-gradient(to_right,#4285F4,#EA4335,#FBBC05,#34A853)] shadow-lg sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-xl sm:text-lg md:text-xl hover:bg-gray-800 border-[2px] border-white hover:scale-105 hover:shadow-xl active:scale-95"
-                >
+                  className="z-10 cursor-pointer px-6 py-3 text-base font-bold text-white transition-all duration-300 transform bg-[linear-gradient(to_right,#4285F4,#EA4335,#FBBC05,#34A853)] shadow-lg sm:px-8 sm:py-4 md:px-10 md:py-5 rounded-xl sm:text-lg md:text-xl hover:bg-gray-800 border-[2px] border-white hover:scale-105 hover:shadow-xl active:scale-95">
                   Get Started!
                 </a>
               </div>
@@ -183,146 +172,164 @@ export default function Home() {
         <div className="container mx-auto">
           {/* Form Section */}
           <section
-            className="flex flex-col md:flex-row items-center justify-center gap-10 my-10 px-6 md:pl-16  min-h-[90vh] "
-            id="dp-container"
-          >
-            {/* Left side: form */}
-            <div className="w-full md:w-2/5 flex flex-col justify-center ">
-              <h2 className="pb-4 mb-8 text-3xl text-black font-bold border-b-2 border-black">
-                Input your details
-              </h2>
+            className="flex flex-col lg:flex-row items-center justify-center gap-10 my-10 px-6 md:pl-16 min-h-[90vh]"
+            id="dp-container">
+            <div
+              className={`transition-opacity duration-500 ease-in-out w-full ${
+                showPhotoBoard
+                  ? "opacity-0 pointer-events-none absolute"
+                  : "opacity-100"
+              }`}>
+              {/* --- FORM VIEW --- */}
+              <div className="w-full md:w-2/5 flex flex-col justify-center mx-auto">
+                <h2 className="pb-4 mb-8 text-3xl text-black font-bold border-b-2 border-black">
+                  Input your details
+                </h2>
 
-              {/* Full Name */}
-              <div className="mb-4">
-                <label className="text-black" htmlFor="name">
-                  Full Name
-                </label>
-                <input
-                  placeholder="Your Name"
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="border border-gray-300 rounded-md p-2 mt-1 w-full"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-
-              {/* Tag Hook */}
-              <div className="mb-4">
-                <label className="text-black" htmlFor="tag">
-                  Tag Hook
-                </label>
-                <input
-                  placeholder="e.g. #DevFest2025"
-                  type="text"
-                  id="tag"
-                  name="tag"
-                  className="border border-gray-300 rounded-md p-2 mt-1 w-full"
-                  value={tag}
-                  onChange={(e) => setTag(e.target.value)}
-                />
-              </div>
-
-              {/* Upload Image */}
-              <div>
-                <label
-                  className="block mb-3 font-semibold"
-                  htmlFor="file-upload"
-                >
-                  Upload Image
-                </label>
-                <div
-                  className={`relative flex flex-col justify-center h-64 p-12 text-center transition-all border-2 border-dashed rounded-2xl ${
-                    dragActive
-                      ? "border-blue-500 bg-blue-50"
-                      : "hover:border-blue-500"
-                  }`}
-                  onClick={handleClick}
-                  onDragEnter={handleDrag}
-                  onDragOver={handleDrag}
-                  onDragLeave={handleDrag}
-                  onDrop={handleDrop}
-                  style={{ cursor: "pointer" }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="40"
-                    height="40"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-cloud-upload mx-auto mb-2"
-                  >
-                    <path d="M12 13v8" />
-                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
-                    <path d="m8 17 4-4 4 4" />
-                  </svg>
-                  <p className="text-sm">
-                    Click or drag and drop your profile picture
-                    <br />
-                    SVG, PNG, JPG or GIF (max. 800 × 400 px)
-                  </p>
+                {/* Full Name */}
+                <div className="mb-4">
+                  <label className="text-black" htmlFor="name">
+                    Full Name
+                  </label>
                   <input
-                    id="file-upload"
-                    ref={inputRef}
-                    accept="image/*"
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
+                    placeholder="Your Name"
+                    type="text"
+                    id="name"
+                    name="name"
+                    className="border border-gray-300 rounded-md p-2 mt-1 w-full"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
-                  {typeof image === "string" && image && (
-                    <img
-                      src={image}
-                      alt="Preview"
-                      className="mx-auto mt-4 rounded-lg object-cover max-h-32"
-                    />
-                  )}
                 </div>
-              </div>
 
-              {/* Generate button */}
-              <div className="flex flex-col items-center gap-4 w-full mt-6">
-                <button
-                  className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 w-full rounded-2xl h-14 text-lg"
-                  onClick={handleGenerate}
-                  type="button"
-                  disabled={!name && !tag && !image}
-                  style={{
-                    opacity: !name && !tag && !image ? 0.5 : 1,
-                    cursor: !name && !tag && !image ? "not-allowed" : "pointer",
-                  }}
-                >
-                  Generate
-                </button>
+                {/* Tag Hook */}
+                <div className="mb-4">
+                  <label className="text-black" htmlFor="tag">
+                    Tag Hook
+                  </label>
+                  <input
+                    placeholder="e.g. #DevFest2025"
+                    type="text"
+                    id="tag"
+                    name="tag"
+                    className="border border-gray-300 rounded-md p-2 mt-1 w-full"
+                    value={tag}
+                    onChange={(e) => setTag(e.target.value)}
+                  />
+                </div>
+
+                {/* Upload Image */}
+                <div>
+                  <label
+                    className="block mb-3 font-semibold"
+                    htmlFor="file-upload">
+                    Upload Image
+                  </label>
+                  <div
+                    className={`relative flex flex-col justify-center h-64 p-12 text-center transition-all border-2 border-dashed rounded-2xl ${
+                      dragActive
+                        ? "border-blue-500 bg-blue-50"
+                        : "hover:border-blue-500"
+                    }`}
+                    onClick={handleClick}
+                    onDragEnter={handleDrag}
+                    onDragOver={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDrop={handleDrop}
+                    style={{ cursor: "pointer" }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="40"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-cloud-upload mx-auto mb-2">
+                      <path d="M12 13v8" />
+                      <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+                      <path d="m8 17 4-4 4 4" />
+                    </svg>
+                    <p className="text-sm">
+                      Click or drag and drop your profile picture
+                      <br />
+                      SVG, PNG, JPG or GIF (max. 800 × 400 px)
+                    </p>
+                    <input
+                      id="file-upload"
+                      ref={inputRef}
+                      accept="image/*"
+                      type="file"
+                      style={{ display: "none" }}
+                      onChange={handleFileChange}
+                    />
+                    {typeof image === "string" && image && (
+                      <img
+                        src={image}
+                        alt="Preview"
+                        className="mx-auto mt-4 rounded-lg object-cover max-h-32"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Generate button */}
+                <div className="flex flex-col items-center gap-4 w-full mt-6">
+                  <button
+                    className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-blue-500 text-white hover:bg-blue-600 w-full rounded-2xl h-14 text-lg"
+                    onClick={() => {
+                      handleGenerate();
+                      setShowPhotoBoard(true);
+                    }}
+                    type="button"
+                    disabled={!name && !tag && !image}
+                    style={{
+                      opacity: !name && !tag && !image ? 0.5 : 1,
+                      cursor:
+                        !name && !tag && !image ? "not-allowed" : "pointer",
+                    }}>
+                    Generate
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Right side: preview */}
-            <div className="w-full overflow-x-auto ">
-              <div className="min-w-[700px] mx-auto flex justify-center items-center">
-                <PhotoBoard
-                  ref={photoBoardRef}
-                  tag={generatedTag}
-                  name={generatedName}
-                  image={generatedImage}
-                />
+            <div
+              className={`transition-opacity duration-500 ease-in-out w-full flex flex-col items-center justify-center ${
+                showPhotoBoard
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none absolute"
+              }`}>
+              {/* --- PHOTOBOARD VIEW --- */}
+              <div className="w-full max-w-full mx-auto overflow-auto touch-pan-y touch-pan-x">
+                <div className="min-w-[700px] min-h-[350px] mx-auto flex justify-center items-center">
+                  <PhotoBoard
+                    ref={photoBoardRef}
+                    tag={generatedTag}
+                    name={generatedName}
+                    image={generatedImage}
+                  />
+                </div>
               </div>
-              {/* Show PhotoBoard and Download button only if generated */}
-              {(generatedName || generatedTag || generatedImage) && (
-                <section className="flex items-center justify-center gap-4 px-6 md:px-16 mt-4">
-                  <button
-                    className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-black text-white w-fit rounded-2xl h-14 text-lg flex gap-1 items-center"
-                    onClick={handleDownload}
-                    type="button"
-                  >
-                    <IoCloudDownloadOutline /> <span>Download Your Dp</span>
-                  </button>
-                </section>
-              )}
+
+              {/* Download + Regenerate Buttons */}
+              <section className="flex items-center justify-center gap-4 px-6 md:px-16 mt-4">
+                <button
+                  className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-black text-white w-fit rounded-2xl h-14 text-lg flex gap-1 items-center"
+                  onClick={handleDownload}
+                  type="button">
+                  <IoCloudDownloadOutline className="size-6 md:size-8"/> <span className="ml-1">Download</span>
+                </button>
+
+                <button
+                  className="px-4 py-2 font-medium transition duration-150 ease-in-out bg-gray-200 text-black w-fit rounded-2xl h-14 text-lg flex gap-1 items-center hover:bg-gray-300"
+                  onClick={() => setShowPhotoBoard(false)}
+                  type="button">
+                  Regenerate
+                </button>
+              </section>
             </div>
           </section>
         </div>
